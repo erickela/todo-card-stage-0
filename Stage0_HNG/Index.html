@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Card</title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+</head>
+
+<body>
+  <article data-testid="test-todo-card">
+    <span data-testid="test-todo-priority">High</span>
+    <h2 data-testid="test-todo-title">
+      Finish Stage 0 FE Task
+    </h2>
+    <p data-testid="test-todo-description">
+      Build a <strong>, responsive Todo Card component</strong> using semantic HTML.
+      Include all required elements with exact `data-testid` values: title,
+      description, priority, due date, time remaining, status, checkbox toggle,
+      tags, and edit/delete buttons. Ensure accessibility (labels, keyboard navigation),
+      clean UI, and basic interactivity (toggle completion, dummy edit/delete).
+      Submit a live link and GitHub repo before April 16, 2026.
+
+    </p>
+    <span data-testid="test-todo-status">
+      Pending
+    </span>
+    <label>
+
+      <input type="checkbox" data-testid="test-todo-complete-toggle" />
+      Mark as complete
+    </label>
+    <time data-testid="test-todo-due-date" datetime="2026-04-16T18:00:00">
+      Due April 16, 2026
+    </time>
+    <time data-testid="test-todo-time-remaining">
+      Due in 3 days
+    </time>
+    <ul data-testid="test-todo-tags">
+      <li data-testid="test-todo-tag-work">Work</li>
+      <li data-testid="test-todo-tag-urgent">Urgent</li>
+      <li data-testid="test-todo-tag-design">Design</li>
+    </ul>
+    <button data-testid="test-todo-edit-button">
+      Edit
+    </button>
+    <button data-testid="test-todo-delete-button">
+      Delete
+    </button>
+  </article>
+  <script>
+    const checkbox = document.querySelector('[data-testid="test-todo-complete-toggle"]');
+    const card = document.querySelector('[data-testid="test-todo-card"]');
+    const status = document.querySelector('[data-testid="test-todo-status"]');
+    const timeEl = document.querySelector('[data-testid="test-todo-time-remaining"]');
+
+    checkbox.addEventListener("change", () => {
+      if (checkbox.checked) {
+        card.classList.add("completed");
+        status.textContent = "Done";
+      }
+      else {
+        card.classList.remove("completed");
+        status.textContent = "Pending";
+      }
+    });
+
+    const dueDate = new Date("2026-04-16T18:00:00");
+
+    function updateTimeRemaining() {
+      const now = new Date();
+      const diff = dueDate - now;
+
+      if (diff <= 0) {
+        const overdueMinutes = Math.abs(Math.floor(diff / (1000 * 60)));
+
+        if (overdueMinutes < 60) {
+          timeEl.textContent = `Overdue by ${overdueMinutes} minute${overdueMinutes !== 1 ? "s" : ""}`;
+        } else {
+          const hours = Math.floor(overdueMinutes / 60);
+          timeEl.textContent = `Overdue by ${hours} hour${hours !== 1 ? "s" : ""}`;
+        }
+
+        return;
+      }
+
+      const minutes = Math.floor(diff / (1000 * 60));
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+
+      if (minutes <= 1) {
+        timeEl.textContent = "Due now!";
+      } else if (minutes < 60) {
+        timeEl.textContent = `Due in ${minutes} minute${minutes !== 1 ? "s" : ""}`;
+      } else if (hours < 24) {
+        timeEl.textContent = `Due in ${hours} hour${hours !== 1 ? "s" : ""}`;
+      } else if (days === 1) {
+        timeEl.textContent = "Due tomorrow";
+      } else {
+        timeEl.textContent = `Due in ${days} days`;
+      }
+    }
+
+    updateTimeRemaining();
+    setInterval(updateTimeRemaining, 60000); // updates every 60s
+
+    function editTask() {
+      console.log("edit clicked");
+    }
+
+    function deleteTask() {
+      alert("Delete clicked");
+    }
+  </script>
+</body>
+
+</html>

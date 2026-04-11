@@ -1,0 +1,115 @@
+    * {
+      box-sizing: border-box;
+      margin: px;
+      padding: px;
+    }
+
+    article {
+      width: 100%;
+      max-width: 480px;
+      padding: 20px;
+      border-radius: 20px;
+
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+
+      border: 1px solid rgba(255, 255, 255, 0.1);
+
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      transition: 0.3s ease;
+    }
+
+    article:hover {
+      transform: translateY(-5px);
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background: radial-gradient(circle at top, #1e293b, #020617);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+      color: #e5e7eb;
+    }
+
+    h2 {
+      font-size: 20px;
+    }
+
+    p {
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    [data-testid="test-todo-priority"] {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      max-width: 45px;
+
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+    }
+
+    [data-testid="test-todo-status"] {
+      font-weight: bold;
+      color: #7c3aed;
+    }
+
+    [data-testid="test-todo-tags"] {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      list-style: none;
+    }
+
+    [data-testid="test-todo-tags"] li {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+    }
+
+    button {
+      padding: 6px 12px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+
+      background: rgba(255, 255, 255, 0.08);
+      color: #e5e7eb;
+
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    button:focus {
+      outline: 2px solid #7c3aed;
+    }
+
+    input[type="checkbox"] {
+      transform: scale(1.2);
+      accent-color: #7c3aed;
+      cursor: pointer;
+    }
+
+    .completed h2 {
+      text-decoration: line-through;
+      color: #94a3b8;
+    }
+
+    article {
+      width: 100%;
+      max-width: 480px;
+    }
