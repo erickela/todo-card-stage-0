@@ -7,114 +7,260 @@
   <title>Task Card</title>
   <link rel="stylesheet" href="style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+
 </head>
 
 <body>
   <article data-testid="test-todo-card">
-    <span data-testid="test-todo-priority">High</span>
-    <h2 data-testid="test-todo-title">
-      Finish Stage 0 FE Task
-    </h2>
-    <p data-testid="test-todo-description">
-      Build a <strong>, responsive Todo Card component</strong> using semantic HTML.
-      Include all required elements with exact `data-testid` values: title,
-      description, priority, due date, time remaining, status, checkbox toggle,
-      tags, and edit/delete buttons. Ensure accessibility (labels, keyboard navigation),
-      clean UI, and basic interactivity (toggle completion, dummy edit/delete).
-      Submit a live link and GitHub repo before April 16, 2026.
 
-    </p>
-    <span data-testid="test-todo-status">
-      Pending
-    </span>
-    <label>
+    <!-- ✅ NORMAL VIEW -->
+    <div id="view-mode">
 
-      <input type="checkbox" data-testid="test-todo-complete-toggle" />
-      Mark as complete
-    </label>
-    <time data-testid="test-todo-due-date" datetime="2026-04-16T18:00:00">
-      Due April 16, 2026
-    </time>
-    <time data-testid="test-todo-time-remaining">
-      Due in 3 days
-    </time>
-    <ul data-testid="test-todo-tags">
-      <li data-testid="test-todo-tag-work">Work</li>
-      <li data-testid="test-todo-tag-urgent">Urgent</li>
-      <li data-testid="test-todo-tag-design">Design</li>
-    </ul>
-    <button data-testid="test-todo-edit-button">
-      Edit
-    </button>
-    <button data-testid="test-todo-delete-button">
-      Delete
-    </button>
+      <div style="display: flex; align-items: center; gap: 8px;">
+  <span data-testid="test-todo-priority-indicator" id="priority-indicator"></span>
+  <span data-testid="test-todo-priority">High</span>
+</div>
+
+      <h2 data-testid="test-todo-title">
+        Finish Stage 0 FE Task
+      </h2>
+
+      <div id="desc-container" data-testid="test-todo-collapsible-section">
+  <p data-testid="test-todo-description">
+    Build a, <strong>responsive Todo Card component</strong> using semantic HTML.
+    Include all required elements with exact data-testid values: title,
+    description, priority, due date, time remaining, status, checkbox toggle,
+    tags, and edit/delete buttons. Ensure accessibility, clean UI, and interactivity.
+  </p>
+</div>
+
+<button 
+  data-testid="test-todo-expand-toggle"
+  id="expand-btn"
+  aria-expanded="false"
+  aria-controls="desc-container"
+>
+  Show more
+</button><br>
+
+      <span data-testid="test-todo-status">Pending</span>
+
+      <select data-testid="test-todo-status-control">
+  <option>Pending</option>
+  <option>In Progress</option>
+  <option>Done</option>
+</select>
+
+      <label>
+        <input type="checkbox" data-testid="test-todo-complete-toggle" />
+        Mark as complete
+      </label><br>
+
+      <time data-testid="test-todo-due-date">
+        Due April 16, 2026
+      </time><br>
+
+      <time data-testid="test-todo-time-remaining">
+        Due in 3 days
+      </time>
+
+      <span data-testid="test-todo-overdue-indicator"></span>
+
+      <ul data-testid="test-todo-tags">
+        <li data-testid="test-todo-tag-work">Work</li>
+        <li data-testid="test-todo-tag-urgent">Urgent</li>
+        <li data-testid="test-todo-tag-design">Design</li>
+
+      </ul>
+
+      <button data-testid="test-todo-edit-button">Edit</button>
+      <button data-testid="test-todo-delete-button">Delete</button>
+
+    </div>
+
+
+    <!-- ✅ EDIT FORM (HIDDEN INITIALLY) -->
+<div data-testid="test-todo-edit-form" id="edit-form" style="display: none;">
+
+      <label for="edit-title">Title</label>
+      <input id="edit-title" data-testid="test-todo-edit-title-input" />
+
+      <label for="edit-desc">Description</label>
+      <textarea id="edit-desc" data-testid="test-todo-edit-description-input"></textarea>
+
+      <label for="edit-priority">Priority</label>
+      <select id="edit-priority" data-testid="test-todo-edit-priority-select">
+        <option>Low</option>
+        <option>Medium</option>
+        <option>High</option>
+      </select>
+
+      <label for="edit-date">Due Date</label>
+      <input type="datetime-local" id="edit-date" data-testid="test-todo-edit-due-date-input" />
+
+      <button data-testid="test-todo-save-button">Save</button>
+      <button data-testid="test-todo-cancel-button">Cancel</button>
+
+    </div>
+
   </article>
   <script>
-    const checkbox = document.querySelector('[data-testid="test-todo-complete-toggle"]');
-    const card = document.querySelector('[data-testid="test-todo-card"]');
-    const status = document.querySelector('[data-testid="test-todo-status"]');
-    const timeEl = document.querySelector('[data-testid="test-todo-time-remaining"]');
+const checkbox = document.querySelector('[data-testid="test-todo-complete-toggle"]');
+const card = document.querySelector('[data-testid="test-todo-card"]');
+const status = document.querySelector('[data-testid="test-todo-status"]');
+const statusControl = document.querySelector('[data-testid="test-todo-status-control"]');
 
-    checkbox.addEventListener("change", () => {
-      if (checkbox.checked) {
-        card.classList.add("completed");
-        status.textContent = "Done";
-      }
-      else {
-        card.classList.remove("completed");
-        status.textContent = "Pending";
-      }
-    });
+const timeEl = document.querySelector('[data-testid="test-todo-time-remaining"]');
+const overdueEl = document.querySelector('[data-testid="test-todo-overdue-indicator"]');
 
-    const dueDate = new Date("2026-04-16T18:00:00");
+const editBtn = document.querySelector('[data-testid="test-todo-edit-button"]');
+const editForm = document.getElementById("edit-form");
+const cancelBtn = document.querySelector('[data-testid="test-todo-cancel-button"]');
+const saveBtn = document.querySelector('[data-testid="test-todo-save-button"]');
 
-    function updateTimeRemaining() {
-      const now = new Date();
-      const diff = dueDate - now;
+const titleEl = document.querySelector('[data-testid="test-todo-title"]');
+const descEl = document.querySelector('[data-testid="test-todo-description"]');
+const priorityEl = document.querySelector('[data-testid="test-todo-priority"]');
+const priorityIndicator = document.getElementById("priority-indicator");
+const dueDateEl = document.querySelector('[data-testid="test-todo-due-date"]');
 
-      if (diff <= 0) {
-        const overdueMinutes = Math.abs(Math.floor(diff / (1000 * 60)));
+const titleInput = document.querySelector('[data-testid="test-todo-edit-title-input"]');
+const descInput = document.querySelector('[data-testid="test-todo-edit-description-input"]');
+const priorityInput = document.querySelector('[data-testid="test-todo-edit-priority-select"]');
+const dateInput = document.querySelector('[data-testid="test-todo-edit-due-date-input"]');
 
-        if (overdueMinutes < 60) {
-          timeEl.textContent = `Overdue by ${overdueMinutes} minute${overdueMinutes !== 1 ? "s" : ""}`;
-        } else {
-          const hours = Math.floor(overdueMinutes / 60);
-          timeEl.textContent = `Overdue by ${hours} hour${hours !== 1 ? "s" : ""}`;
-        }
+const viewMode = document.getElementById("view-mode");
 
-        return;
-      }
+let dueDate = new Date("2026-04-16T18:00:00");
 
-      const minutes = Math.floor(diff / (1000 * 60));
-      const hours = Math.floor(minutes / 60);
-      const days = Math.floor(hours / 24);
+// ---------------- STATUS + CHECKBOX ----------------
+checkbox.addEventListener("change", () => {
+  if (checkbox.checked) {
+    status.textContent = "Done";
+    statusControl.value = "Done";
+    card.classList.add("completed");
+  } else {
+    status.textContent = "Pending";
+    statusControl.value = "Pending";
+    card.classList.remove("completed");
+  }
+});
 
-      if (minutes <= 1) {
-        timeEl.textContent = "Due now!";
-      } else if (minutes < 60) {
-        timeEl.textContent = `Due in ${minutes} minute${minutes !== 1 ? "s" : ""}`;
-      } else if (hours < 24) {
-        timeEl.textContent = `Due in ${hours} hour${hours !== 1 ? "s" : ""}`;
-      } else if (days === 1) {
-        timeEl.textContent = "Due tomorrow";
-      } else {
-        timeEl.textContent = `Due in ${days} days`;
-      }
-    }
+statusControl.addEventListener("change", () => {
+  const value = statusControl.value;
+  status.textContent = value;
 
-    updateTimeRemaining();
-    setInterval(updateTimeRemaining, 60000); // updates every 60s
+  if (value === "Done") {
+    checkbox.checked = true;
+    card.classList.add("completed");
+  } else {
+    checkbox.checked = false;
+    card.classList.remove("completed");
+  }
+});
 
-    function editTask() {
-      console.log("edit clicked");
-    }
+// ---------------- TIME ----------------
+function updateTimeRemaining() {
+  if (status.textContent === "Done") {
+    timeEl.textContent = "Completed";
+    overdueEl.textContent = "";
+    return;
+  }
 
-    function deleteTask() {
-      alert("Delete clicked");
-    }
-  </script>
+  const now = new Date();
+  const diff = dueDate - now;
+
+  if (diff <= 0) {
+    overdueEl.textContent = "Overdue";
+    timeEl.textContent = "Overdue";
+    return;
+  }
+
+  overdueEl.textContent = "";
+
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  const days = Math.floor(hours / 24);
+
+  if (days > 0) {
+    timeEl.textContent = `Due in ${days} day${days !== 1 ? "s" : ""}`;
+  } else {
+    timeEl.textContent = `Due in ${hours} hour${hours !== 1 ? "s" : ""}`;
+  }
+}
+
+updateTimeRemaining();
+setInterval(updateTimeRemaining, 1000);
+
+// ---------------- EDIT MODE ----------------
+editBtn.addEventListener("click", () => {
+  viewMode.style.display = "none";
+  editForm.style.display = "block";
+
+  // prefill
+  titleInput.value = titleEl.textContent;
+  descInput.value = descEl.textContent;
+  priorityInput.value = priorityEl.textContent;
+});
+
+cancelBtn.addEventListener("click", () => {
+  editForm.style.display = "none";
+  viewMode.style.display = "block";
+});
+
+// ---------------- SAVE ----------------
+saveBtn.addEventListener("click", () => {
+
+  const newTitle = titleInput.value.trim() || titleEl.textContent;
+  const newDesc = descInput.value.trim() || descEl.textContent;
+  const newPriority = priorityInput.value || priorityEl.textContent;
+
+  titleEl.textContent = newTitle;
+  descEl.textContent = newDesc;
+  priorityEl.textContent = newPriority;
+
+  updatePriorityIndicator(newPriority);
+
+  if (dateInput.value) {
+    dueDate = new Date(dateInput.value);
+    dueDateEl.textContent = "Due " + dueDate.toDateString();
+    dueDateEl.setAttribute("datetime", dueDate.toISOString());
+  }
+
+  editForm.style.display = "none";
+  viewMode.style.display = "block";
+
+  updateTimeRemaining();
+});
+
+// ---------------- PRIORITY ----------------
+function updatePriorityIndicator(value) {
+  priorityIndicator.classList.remove("low", "medium", "high");
+
+  if (value === "Low") priorityIndicator.classList.add("low");
+  if (value === "Medium") priorityIndicator.classList.add("medium");
+  if (value === "High") priorityIndicator.classList.add("high");
+}
+
+updatePriorityIndicator(priorityEl.textContent);
+
+// ---------------- EXPAND ----------------
+const expandBtn = document.querySelector('[data-testid="test-todo-expand-toggle"]');
+const descContainer = document.getElementById("desc-container");
+
+let expanded = false;
+
+expandBtn.addEventListener("click", () => {
+  expanded = !expanded;
+
+  if (expanded) {
+    descContainer.classList.add("expanded");
+    expandBtn.textContent = "Show less";
+  } else {
+    descContainer.classList.remove("expanded");
+    expandBtn.textContent = "Show more";
+  }
+});
+</script>
 </body>
 
 </html>
