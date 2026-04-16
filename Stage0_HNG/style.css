@@ -113,3 +113,85 @@
       width: 100%;
       max-width: 480px;
     }
+
+    #desc-container {
+  max-height: 60px;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+#desc-container.expanded {
+  max-height: 500px;
+}
+
+[data-testid="test-todo-overdue-indicator"] {
+  color: #ef4444;
+  font-weight: bold;
+}
+
+#priority-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+/* Priority colors */
+.low {
+  background-color: #22c55e; /* green */
+}
+
+.medium {
+  background-color: #eab308; /* yellow */
+}
+
+.high {
+  background-color: #ef4444; /* red */
+}
+
+.high {
+  background-color: #ef4444;
+  box-shadow: 0 0 10px #ef4444;
+}
+
+/* Edit Form Container */
+#edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Inputs + textarea + select */
+#edit-form input,
+#edit-form textarea,
+#edit-form select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  width: 100%;
+}
+
+/* Buttons */
+#edit-form button {
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Save button */
+[data-testid="test-todo-save-button"] {
+  background-color: #22c55e;
+  color: white;
+}
+
+/* Cancel button */
+[data-testid="test-todo-cancel-button"] {
+  background-color: #ef4444;
+  color: white;
+}
+
+/* Button hover */
+#edit-form button:hover {
+  opacity: 0.9;
+}
